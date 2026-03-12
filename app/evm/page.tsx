@@ -121,7 +121,7 @@ export default function Home() {
         const isVerified = Array.isArray(contractCallResult)
           ? Boolean(contractCallResult[0])
           : false;
-        const uniqueIdentifier = Array.isArray(contractCallResult)
+        const _uniqueIdentifier = Array.isArray(contractCallResult)
           ? String(contractCallResult[1])
           : "";
         setOnChainVerified(isVerified);
