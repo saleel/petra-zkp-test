@@ -90,6 +90,7 @@ function MarketsSection({ marketIds }: { marketIds: number[] }) {
 
 interface ZkPassportVerifyProps {
   marketIds?: number[]
+  zkPassportDomain?: string
 }
 
 function isValidEthAddress(input: string): boolean {
@@ -101,7 +102,7 @@ function looksLikeEns(input: string): boolean {
   return trimmed.includes(".") && !isValidEthAddress(trimmed) && trimmed.length > 3
 }
 
-export default function ZkPassportVerify({ marketIds = [] }: ZkPassportVerifyProps) {
+export default function ZkPassportVerify({ marketIds = [], zkPassportDomain }: ZkPassportVerifyProps) {
   const [state, setState] = useState<VerificationState>("idle")
   const [scanStatus, setScanStatus] = useState<ScanStatus>("awaiting_scan")
   const [error, setError] = useState<string | null>(null)
@@ -187,10 +188,10 @@ export default function ZkPassportVerify({ marketIds = [] }: ZkPassportVerifyPro
 
     try {
       if (!zkpassportRef.current) {
-        zkpassportRef.current = new ZKPassport()
+        zkpassportRef.current = zkPassportDomain ? new ZKPassport(zkPassportDomain) : new ZKPassport()
       }
 
-      const devMode = process.env.NODE_ENV === "development"
+      const devMode = process.env.NEXT_PUBLIC_ZKPASSPORT_DEV_MODE === "true"
       const query = await zkpassportRef.current.request({
         name: "MATE Faucet",
         logo: "https://matetoken.xyz/favicon.ico",
